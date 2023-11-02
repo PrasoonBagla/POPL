@@ -1,0 +1,6 @@
+rule go
+  command = go build -o $out $in
+
+build bin/fib: go fib.go
+build bin/http: go http.go
+build bin/fib_gmp: go fib_gmp.go
