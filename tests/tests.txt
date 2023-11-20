@@ -1,0 +1,23 @@
+Go Files:
+
+1. fannkuch-redux.go:
+   - Test Description: Implements the Fannkuch-redux algorithm with performance benchmarking. Computes maximum flips and a checksum for number sequence permutations.
+   - Dataset: Sequence of numbers of length defined by 'n'. Permutations of this sequence form the dataset.
+   - Benchmarking: Measures execution time and memory usage.
+
+2. fib.go:
+   - Test Description: Sets up a basic HTTP server. Simulates sending requests and logs response time.
+   - Dataset: Series of HTTP requests to the server. Response times form the data for analysis.
+   - Data Logging: Logs performance metrics like response time into an Excel file.
+
+Rust Files:
+
+1. fannkuch-redux.rs:
+   - Test Description: Similar to Go, implements the Fannkuch-redux algorithm with execution time and memory usage measurement.
+   - Dataset: Generated from a sequence of numbers. Processes permutations of this sequence.
+   - Performance Metrics: Measures and displays execution time and peak memory usage.
+
+2. fib.rs:
+   - Test Description: Sets up a basic HTTP server using Warp, handles GET and POST requests.
+   - Dataset: HTTP requests made to the server. Responses and request data are used for analysis.
+   - Server Functionality Testing: Tests the server's ability to handle and respond to GET and POST requests.
