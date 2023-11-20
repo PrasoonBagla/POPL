@@ -1,250 +1,117 @@
-# Go vs Rust
+#  Comparing the performance of different methods/packages and HTTP servers in both Go and Rust.
+ 
+We have created the following project in fullfillment of requirement of the course CS-F301 : Principles of Programming Language for IC-  Prof. Kunal Korgaonkar
+ 
+ 
+## Group Members
+Prasoon Bagla -2020B3A71159G
+Vidhi Kabra -2020B3A70569G
+Varun Gopal -2020B3A71785G
+Yash Shardendu Agrawal -2020B1A71589G
+ 
+ 
+ 
+ 
+ 
+## 1). Problem Statement
+## Objective
+This project aims to compare the performance features of Go and Rust in two specific areas: computational properties using the Fannkuch-redux algorithm and basic HTTP server functionality.
+ 
+## POPL Angle
+The Principles of Programming Languages (POPL) perspective is central to this analysis. By evaluating how Go and Rust perform in identical tasks, we gain insights into how language design and features impact performance. This comparative study focuses on syntactical and structural aspects, memory management, concurrency models, and type systems inherent to each language.
+ 
+## Previous Solutions and Differentiation
+Comparative studies between programming languages are common, but this project takes a practical, application-based approach. By using specific algorithms and server implementations, it provides direct insights into real-world performance, rather than relying on theoretical benchmarks.
+ 
+ 
+## 2). Software Architecture 
+ 
+## Computational Components: 
+Standalone units for Go and Rust implementing the Fannkuch-redux algorithm.
+ 
+## Web Server Components: 
+Basic HTTP servers in both languages.
+Data Logging/Reporting: Performance metrics are logged using Excel file generation and manipulation.
+ 
+## Client-Server Architecture: 
+The HTTP servers indicate a client-server setup.
+## Testing Components: 
+The placement of testing components (local or remote) is inferred but not explicitly stated in the code.
+No Database Involvement: Data storage is file-based, focusing on Excel files rather than a database.
+ 
+## Reused and Developed Components
+Parts of the architecture, like HTTP server setup and Excel file manipulation, rely on existing libraries and frameworks. The core computational and performance measurement components have been developed to suit the specific needs of this project.
+ 
+ 
+## 3). POPL Aspects in Implementation
+Go Implementation
+Concurrency Model: The use of goroutines in fannkuch-redux.go demonstrates Go's lightweight thread management, a key aspect of its concurrency model.
+Memory Management: Go's garbage collection is evident in how memory allocation is handled in fib.go .
+Rust Implementation
+Ownership and Borrowing: Rust's unique approach to memory safety through ownership is showcased in fannkuch-redux.rs.
+Concurrency with Safety: The use of threads in Rust, ensuring memory safety, is seen in fib.rs .
+These aspects are crucial for understanding the performance and safety guarantees each language offers.
+ 
+ 
+## 4). Results
+ 
+## HTTP Server analysis
+We have analysed the compared and analysed the response times of 1000 HTTP requests on both go and rust. The median response time for the Go server is 1.232 units, while for the Rust server it’s 2.101 units. This suggests that typically, the Go server has a faster response time than the Rust server. The standard deviation for the Go server is 0.543 units, while for the Rust server it’s 1.856 units. This indicates that the response times for the Rust server are more spread out and vary more widely, while the response times for the Go server are more consistent. The Go server’s response time peaks around 8 units, while the Rust server’s response time goes up to 20 units. This could suggest that the Go server is able to handle requests more quickly. In conclusion, based on these statistics, the Go server not only typically responds faster (lower median), but its response times are also more consistent (lower standard deviation). Many factors can influence these metrics and these are the factors that favour Go over Rust when it comes to HTTP servers:
+1)Go (Goroutines): Go is designed to be concurrent with lightweight goroutines and provides built-in support for concurrency. The http.ListenAndServe function uses goroutines to handle incoming requests concurrently. This can lead to efficient utilization of resources and faster response times.  In the Rust code, tokio::spawn is used for asynchronous execution, but the server itself may not be handling requests concurrently. Depending on the specific warp configuration and how it handles incoming requests, it might not be as concurrent as the Go server.
+2) Underlying Runtime and Execution Model:Go has a runtime that includes garbage collection and is optimized for concurrent execution. The Go scheduler is designed to efficiently manage goroutines.
+Rust has a different execution model. Tokio provides asynchronous runtime.
+ 
+ ![Alt text](/results/go%20graph.png)
+![Alt text](/results/rust%20graph.png)
+## Pfannkuchen Algorithm analysis:
+ 
+## Memory usage:
+it appears that the Pfannkuchen function uses more memory on average in Rust than in Go. The mean peak memory used for Rust is 911 KB, while for Go it’s 106 KB. This suggests that, on average, Rust uses more memory than Go when executing the Pfannkuchen function.
+ 
+However, the standard deviation, which measures the amount of variation or dispersion from the average, is higher for Go (151.296) than for Rust (37.176). This indicates that the memory usage for Go varies more widely than those for Rust.
+ 
+The memory usage difference can be attributed to the design and optimization of the two languages:
+ 
+Rust uses a strict and safe memory system that eliminates the need for a garbage collector, resulting in faster speed and lower memory usage. However, Rust’s static type system and ownership model, which allow the compiler to generate more efficient code, can lead to higher memory usage in some cases.
+ 
+Go, on the other hand, uses garbage collection, which automatically frees the memory that is no longer needed by the program. Additionally, Go’s focus on simplicity means that it generally requires less code than Rust and, thus, less memory. However, Go’s garbage collector periodically works in the background to free up data once you hit some pre-specified value, which can add to system overhead and cause variations in memory usage.
+![Alt text](/results/peak%20memory%20go.png)
+![Alt text](/results/peak%20memory%20rust.png)
 
-## What This?
-This repository containse the code to experiment their performance between Go and
-Rust.
-
-## Why I Made This?
-Golang is one of the well-known language that is good at handling concurrency,
-productivity, and etc. In addition to this, Golang is beginning to be used for
-various industries such as Medication Backends, Financial Backends, and Web
-Backends as you might know.
-
-While Golang can handle concurrency very well, Rust can reduce memory overheads
-by using Zero-Cost Abstraction. In addition, rust has "release" mode to optimize
-the app for releasing. In addition to these, [Rust is the most loved language
-in 2020](https://insights.stackoverflow.com/survey/2020#technology-most-loved-dreaded-and-wanted-languages).
-
-So... my question is that which language has better performance. I know Golang
-is enough faster, but I also like Rust somehow. So, to make a proof of the
-performance comparison, I made this repository.
-
-## Machine Environment
+## Time Elapsed
+ 
+It appears that the Pfannkuchen function runs faster on average in Rust than in Go. The mean time elapsed for Rust is 652 microseconds, while for Go it’s 3295.834 microseconds. This suggests that, on average, Rust executes the Pfannkuchen function more quickly than Go.
+ 
+However, the standard deviation, which measures the amount of variation or dispersion from the average, is higher for Rust (146467663.2) than for Go (19223660.31). This indicates that the execution times for Rust vary more widely than those for Go.
+ 
+The performance difference can be attributed to the design and optimization of the two languages:
+ 
+Rust is designed for systems programming and high-performance computing, with a focus on zero-cost abstractions, minimal runtime, and improved memory safety. It provides fine-grained control over how threads behave and how resources are shared between threads. This can lead to more efficient execution of certain tasks, such as the Pfannkuchen function.
+ 
+Go, on the other hand, was designed with simplicity and readability in mind. It uses garbage collection and has features like Goroutines that make it easy for developers to build applications that take full advantage of concurrency. However, these features might introduce some overhead, leading to slightly slower execution times compared to Rust.
+![Alt text](/results/time%20elapsed%20go%20.png)
+![Alt text](/results/time%20elapsed%20rust.png)
+## 5). Potential for Future Work
+Given more time, the project could explore:
+ 
+Advanced Concurrency Patterns: Investigating complex concurrency models in Go and Rust.
+Memory Optimization Techniques: Deeper analysis of memory usage and optimization.
+Expanded Benchmarking: Including more diverse computational tasks and server functionalities.
+Language Interoperability: Exploring how Go and Rust can interoperate in a larger system.
+Additional POPL aspects like error handling paradigms, type inference, and metaprogramming capabilities could also be examined.
+ 
+## Running Tests
+ 
+To run tests, run the following commands
+ 
+```bash
+  cargo build 
+  cargo run --build <file name> <input>
 ```
-    hyamamoto@hyamamoto-home (pts/3)    ~/Documents/Workspace/go-vs-rust     master ?1  archey3                                                  ✔  13:18:19 
-
-               +                OS: Arch Linux x86_64
-               #                Hostname: hyamamoto-home
-              ###               Kernel Release: 5.7.7-arch1-1
-             #####              Uptime: 2:44
-             ######             WM: KWin
-            ; #####;            DE: KDE
-           +##.#####            Packages: 1493
-          +##########           RAM: 5311 MB / 32085 MB
-         #############;         Processor Type: AMD Ryzen 7 3700X 8-Core Processor
-        ###############+        $EDITOR: vim
-       #######   #######        Root: 39G / 457G (8%) (ext4)
-     .######;     ;###;`".
-    .#######;     ;#####.
-    #########.   .########`
-   ######'           '######
-  ;####                 ####;
-  ##'                     '##
- #'                         `#
-
+ 
+```bash
+  go build
+  go run <file name> <input>
 ```
-
-## Assumption of the app
-The applications are assumed to be released. Therefore, the standard optimization
-will be enabled if possible. (i.e. Rust apps will be built with `--release` flag.)
-
-## 1. Fibonacci Numbers
-
-Fibonacci Numbers are known as a good sample to test basic coding skills, and
-code performance.
-
-I calculated fib(2^20 = 1048576) in Go and Rust. Here is the result:
-
-### Golang
-```
-    hyamamoto@hyamamoto-home (pts/3)    ~/Doc/W/go-vs-rust/go     master !1 ?4  time ./bin/fib 1048576                                           ✔  13:39:25 
-(Super big number)
-./bin/fib 1048576  198.51s user 24.31s system 180% cpu 2:03.65 total
-```
-
-golang app takes around 2 minutes, but after I researched `math/big` code, it
-uses Karatsuba algorithm while `rug` (Multi Precision Libary for Rust) uses GMP
-that uses FFT. i.e. `math/big` takes O(n^(log 3)) while `rug` takes O(n log n).
-So, I re-wrote the go code to use GMP. Here is the "re-wrote" result:
-
-```
-    hyamamoto@hyamamoto-home (pts/1)    ~/Doc/W/go-vs-rust     master !4 ?1  time ./go/bin/fib_gmp 1048576                                       ✔  09:17:28 
-./go/bin/fib_gmp 1048576  72.74s user 13.31s system 117% cpu 1:13.52 total
-```
-
-So.. it takes around 1 mins and 10 secs.
-
-### Rust
-```
-    hyamamoto@hyamamoto-home (pts/1)    ~/Doc/W/go-vs-rust/rust     master !1 ?4  time ./target/release/fib 1048576                     ✔  28s    13:47:38 
-(Super big number)
-./target/release/fib 1048576  25.65s user 1.40s system 99% cpu 27.083 total
-```
-I doubted my eyes (and brain), but Rust app takes around 30 **secs**.
-
-### The Reuslt
-Rust app is x2 faster than Golang. Therefore, Rustlang has better performance
-than Go in calculating Fibonacci Numbers.
-
-## 2. Http
-
-Next, this is what all web-backend developers want to know, which language has
-better throughput? Here is the result:
-
-### Golang
-```
-    hyamamoto@hyamamoto-home (pts/3)    ~/Doc/W/go-vs-rust/go     master !1  ab -n 16000000 -c $(nproc) 'http://localhost:5000/'              22 ✘  14:19:11 
-This is ApacheBench, Version 2.3 <$Revision: 1874286 $>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking localhost (be patient)
-Completed 1600000 requests
-Completed 3200000 requests
-Completed 4800000 requests
-Completed 6400000 requests
-Completed 8000000 requests
-Completed 9600000 requests
-Completed 11200000 requests
-Completed 12800000 requests
-Completed 14400000 requests
-Completed 16000000 requests
-Finished 16000000 requests
-
-
-Server Software:
-Server Hostname:        localhost
-Server Port:            5000
-
-Document Path:          /
-Document Length:        11 bytes
-
-Concurrency Level:      16
-Time taken for tests:   551.510 seconds
-Complete requests:      16000000
-Failed requests:        0
-Total transferred:      2048000000 bytes
-HTML transferred:       176000000 bytes
-Requests per second:    29011.27 [#/sec] (mean)
-Time per request:       0.552 [ms] (mean)
-Time per request:       0.034 [ms] (mean, across all concurrent requests)
-Transfer rate:          3626.41 [Kbytes/sec] received
-
-Connection Times (ms)
-              min  mean[+/-sd] median   max
-Connect:        0    0   0.1      0       4
-Processing:     0    0   0.1      0      11
-Waiting:        0    0   0.1      0      10
-Total:          0    1   0.1      1      11
-
-Percentage of the requests served within a certain time (ms)
-  50%      1
-  66%      1
-  75%      1
-  80%      1
-  90%      1
-  95%      1
-  98%      1
-  99%      1
- 100%     11 (longest request)
-```
-
-So Golang app can handle **around 29000 requests per a second**.
-
-### Rust
-```
-    hyamamoto@hyamamoto-home (pts/3)    ~/Doc/W/go-vs-rust/go     master !1  ab -n 16000000 -c $(nproc) 'http://localhost:5000/'     ✔  9m 22s    14:28:43 
-This is ApacheBench, Version 2.3 <$Revision: 1874286 $>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking localhost (be patient)
-Completed 1600000 requests
-Completed 3200000 requests
-Completed 4800000 requests
-Completed 6400000 requests
-Completed 8000000 requests
-Completed 9600000 requests
-Completed 11200000 requests
-Completed 12800000 requests
-Completed 14400000 requests
-Completed 16000000 requests
-Finished 16000000 requests
-
-
-Server Software:
-Server Hostname:        localhost
-Server Port:            5000
-
-Document Path:          /
-Document Length:        11 bytes
-
-Concurrency Level:      16
-Time taken for tests:   527.022 seconds
-Complete requests:      16000000
-Failed requests:        0
-Total transferred:      2048000000 bytes
-HTML transferred:       176000000 bytes
-Requests per second:    30359.25 [#/sec] (mean)
-Time per request:       0.527 [ms] (mean)
-Time per request:       0.033 [ms] (mean, across all concurrent requests)
-Transfer rate:          3794.91 [Kbytes/sec] received
-
-Connection Times (ms)
-              min  mean[+/-sd] median   max
-Connect:        0    0   0.1      0       2
-Processing:     0    0   0.1      0      11
-Waiting:        0    0   0.1      0      11
-Total:          0    1   0.1      0      11
-ERROR: The median and mean for the total time are more than twice the standard
-       deviation apart. These results are NOT reliable.
-
-Percentage of the requests served within a certain time (ms)
-  50%      0
-  66%      1
-  75%      1
-  80%      1
-  90%      1
-  95%      1
-  98%      1
-  99%      1
- 100%     11 (longest request)
-```
-
-So, Rust can handle around **30300 requests per a second**.
-
-### The Result
-The Rust web server is about 4.5% faster than Go web server. So, rust can handle
-the request faster than go a little in this simple case.
-
-## File Size
-
-### Golang
-```
-    hyamamoto@hyamamoto-home (pts/3)    ~/Doc/W/go-vs-rust     master !1  ls -lh go/bin                                                          ✔  14:53:11 
-total 9.4M
--rwxr-xr-x 1 hyamamoto hyamamoto 2.2M Jul 11 13:39 fib
--rwxr-xr-x 1 hyamamoto hyamamoto 7.2M Jul 11 13:39 http
-```
-
-### Rust
-```
-    hyamamoto@hyamamoto-home (pts/3)    ~/Doc/W/go-vs-rust     master !1  ls -lh rust/target/release                                             ✔  14:53:17 
-total 7.8M
--rwxr-xr-x  2 hyamamoto hyamamoto 3.1M Jul 11 13:46 fib
--rwxr-xr-x  2 hyamamoto hyamamoto 4.7M Jul 11 13:46 http
-```
-
-### The Result
-The fibonacci app written in Go is smaller than Rust, and the web app written in
-Rust is smaller than Go.
-
-## Conclusion
-The apps written in Rust is faster than Golang in a compute situation, but there's
-nothing special in a simple web server situation. Therefore, Rust seems to have
-advantages and non-advantages, including its difficulty to study.
-
-## Which language you should study?
-The both, of course. But Go has simple syntax. So, I'd like you to study Golang
-first. Rust is difficult a little because of ownership and lifetime, but it is
-very valuable to study them.
+ 
+ 
