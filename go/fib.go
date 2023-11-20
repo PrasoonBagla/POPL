@@ -1,60 +1,54 @@
 package main
-
 import (
-	"fmt"
-	"math/big"
-	"os"
-	"strconv"
-	"time"
+    "fmt"
+    "net/http"
+    "time"
+
+    "github.com/tealeg/xlsx" // Excel file package
 )
 
-func fib(n int) *big.Int {
-	calcFactor := [][]*big.Int{
-		{big.NewInt(1), big.NewInt(1)},
-		{big.NewInt(1), big.NewInt(0)},
-	}
-	mat := [][]*big.Int{
-		{big.NewInt(1), big.NewInt(1)},
-		{big.NewInt(1), big.NewInt(0)},
-	}
-	for i := 1; i < n; i++ {
-		matNew := [][]*big.Int{
-			{big.NewInt(0), big.NewInt(0)},
-			{big.NewInt(0), big.NewInt(0)},
-		}
-		matNew[0][0].Add(
-			big.NewInt(1).Mul(mat[0][0], calcFactor[0][0]),
-			big.NewInt(1).Mul(mat[0][1], calcFactor[1][0]),
-		)
-		matNew[0][1].Add(
-			big.NewInt(1).Mul(mat[0][0], calcFactor[0][1]),
-			big.NewInt(1).Mul(mat[0][1], calcFactor[1][1]),
-		)
-		matNew[1][0].Add(
-			big.NewInt(1).Mul(mat[1][0], calcFactor[0][0]),
-			big.NewInt(1).Mul(mat[1][1], calcFactor[1][0]),
-		)
-		matNew[1][1].Add(
-			big.NewInt(1).Mul(mat[1][0], calcFactor[0][1]),
-			big.NewInt(1).Mul(mat[1][1], calcFactor[1][1]),
-		)
-		mat = matNew
-	}
-	return mat[0][1]
+func handler(w http.ResponseWriter, r *http.Request) {
+    // Your handler logic here
+    fmt.Fprintf(w, "Hello, World!")
 }
 
 func main() {
-	num, err := strconv.Atoi(os.Args[1])
-	if err != nil {
-		panic(err)
-	}
+    http.HandleFunc("/", handler)
+    go http.ListenAndServe(":8080", nil)
 
-	startTime := time.Now() // Capture the start time
+    // Create a new Excel file
+    var file *xlsx.File
+    var sheet *xlsx.Sheet
+    var row *xlsx.Row
+    var cell *xlsx.Cell
 
-	res := fib(num)
+    file = xlsx.NewFile()
+    sheet, err := file.AddSheet("Request Times")
+    if err != nil {
+        fmt.Printf("Failed to create sheet: %v", err)
+        return
+    }
 
-	duration := time.Since(startTime) // Compute the duration
+    // Send 1000 requests to the server
+    for i := 0; i < 1000; i++ {
+        start := time.Now()
+        resp, err := http.Get("http://localhost:8080")
+        if err != nil {
+            fmt.Printf("Request failed: %v", err)
+            continue
+        }
+        resp.Body.Close()
+        elapsed := time.Since(start)
 
-	fmt.Println(res.String())
-	fmt.Printf("Execution time: %s\n", duration)
+        // Write the time taken for each request to the Excel sheet in milliseconds with 3 decimal places
+        row = sheet.AddRow()
+        cell = row.AddCell()
+        cell.SetValue(fmt.Sprintf("%.3f", float64(elapsed)/float64(time.Millisecond)))
+    }
+
+    // Save the Excel file
+    err = file.Save("RequestTimes.xlsx")
+    if err != nil {
+        fmt.Printf("Failed to save Excel file: %v", err)
+    }
 }

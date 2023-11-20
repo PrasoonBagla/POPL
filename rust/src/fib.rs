@@ -1,57 +1,65 @@
-use ::std::env;
-use ::std::time::Instant; // <-- Import for measuring time
-use ::rug::Integer;
-
-fn fib(n: i32) -> Integer {
-    if n < 1 {
-        return Integer::from(0);
-    }
-    let mut mat: Vec<Vec<Integer>> = vec![
-        vec![Integer::from(1), Integer::from(1)],
-        vec![Integer::from(1), Integer::from(0)],
-    ];
-    let factor: Vec<Vec<Integer>> = vec![
-        vec![Integer::from(1), Integer::from(1)],
-        vec![Integer::from(1), Integer::from(0)],
-    ];
-    for _ in 1..n {
-        let mut tmp = vec![
-            vec![Integer::new(), Integer::new()],
-            vec![Integer::new(), Integer::new()],
-        ];
-        tmp[0][0] = (
-            mat[0][0].clone() * &factor[0][0]
-        ) + (
-            mat[0][1].clone() * &factor[1][0]
-        );
-        tmp[0][1] = (
-            mat[0][0].clone() * &factor[0][1]
-        ) + (
-            mat[0][1].clone() * &factor[1][1]
-        );
-        tmp[1][0] = (
-            mat[1][0].clone() * &factor[0][0]
-        ) + (
-            mat[1][1].clone() * &factor[1][0]
-        );
-        tmp[1][1] = (
-            mat[1][0].clone() * &factor[0][1]
-        ) + (
-            mat[1][1].clone() * &factor[1][1]
-        );
-        mat = tmp;
-    }
-    return mat[0][1].clone();
+// use std::time::Instant;
+// use warp::Filter;
+// use reqwest::get;
+// use xlsxwriter::*;
+// #[tokio::main]
+// async fn main() {
+//     let route = warp::path!("hello" / String)
+//         .map(|name| {
+//             format!("Hello, {}!", name)
+//         });
+ 
+//     tokio::spawn(async move {
+//         warp::serve(route).run(([127, 0, 0, 1], 8080)).await;
+//     });
+ 
+//     // Create a new workbook
+//     let workbook = Workbook::new("RequestTimes.xlsx");
+//     let mut sheet = workbook.add_worksheet(None).unwrap();
+ 
+//     // Send 1000 requests to the server
+//     for i in 0..1000 {
+//         let start = Instant::now();
+//         let resp = get("http://localhost:8080/hello/world").await;
+//         match resp {
+//             Ok(_) => {
+//                 let elapsed = start.elapsed();
+//                 // Write the time taken for each request to the Excel sheet
+//                 sheet.write_string(i as u32, 0, &format!("{:?}", elapsed), None).unwrap();
+//             }
+//             Err(err) => println!("Request failed: {:?}", err),
+//         }
+//     }
+ 
+//     // Save the workbook
+//     workbook.close().unwrap();
+// }
+#[derive(Deserialize)]
+struct YourRequestBodyType {
+    key: String,
 }
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    let n: i32 = args[1].parse().unwrap();
+use warp::Filter;
+use serde::Deserialize;
 
-    let start_time = Instant::now(); // <-- Start the timer
-    let res = fib(n);
-    let duration = start_time.elapsed(); // <-- Calculate the elapsed time
+#[derive(Deserialize)]
+struct YourRequestBodyType {
+    key: String,
+}
 
-    println!("{}", res.to_string_radix(10));
-    println!("Execution time: {:?}", duration); // <-- Print the execution time
+#[tokio::main]
+async fn main() {
+    let get_route = warp::path("your_get_endpoint")
+        .and(warp::get())
+        .map(|| warp::reply::json(&"Response for GET request"));
+
+    let post_route = warp::path("your_post_endpoint")
+        .and(warp::post())
+        .and(warp::body::json())
+        .map(|body: YourRequestBodyType| {
+            warp::reply::json(&format!("Received POST request with body: {:?}", body))
+        });
+
+    let routes = get_route.or(post_route);
+    warp::serve(routes).run(([127, 0, 0, 1], 3030)).await;
 }

@@ -7,12 +7,35 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [[bin]]
+name = "fannkuch-redux"
+path = "./src/fannkuch-redux.rs"
+
+[[bin]]
 name = "fib"
 path = "./src/fib.rs"
+
+[[bin]]
+name = "http"
+path = "./src/http.rs"
+
+[[bin]]
+name = "loadtester"
+path = "./src/loadtester.rs"
 
 
 [dependencies]
 rug = "1.9.0"
-warp = "0.2.3"
 psutil = "3.2"
-tokio = {version = "0.2.21", features=["full"]}
+rand = "0.8.4"
+rayon = "1.5.0"
+serde_derive = "1.0"
+warp = "0.3"
+hyper = "0.14"
+hyper-rustls = "0.22"
+rustls = { version = "0.19", features = ["dangerous_configuration"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+lazy_static = "1.4"
+tokio = { version = "1", features = ["full"] }
+
