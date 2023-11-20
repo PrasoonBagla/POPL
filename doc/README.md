@@ -44,13 +44,34 @@ Parts of the architecture, like HTTP server setup and Excel file manipulation, r
  
  
 ## 3). POPL Aspects in Implementation
-Go Implementation
+
+## Go Implementation
 Concurrency Model: The use of goroutines in fannkuch-redux.go demonstrates Go's lightweight thread management, a key aspect of its concurrency model.
 Memory Management: Go's garbage collection is evident in how memory allocation is handled in fib.go .
-Rust Implementation
+## Rust Implementation
 Ownership and Borrowing: Rust's unique approach to memory safety through ownership is showcased in fannkuch-redux.rs.
 Concurrency with Safety: The use of threads in Rust, ensuring memory safety, is seen in fib.rs .
 These aspects are crucial for understanding the performance and safety guarantees each language offers.
+
+## Lines of Code:
+
+## Go Files:
+fannkuch-redux.go - Concurrency Model:
+
+Line 21-23: go fannkuch(idxMax, ch) inside a loop. This is a clear example of Go's concurrency model where goroutines are used for parallel computation.
+Line 29-31: Creation of slices p := make([]int, n). In Go, slices are a key data structure, showcasing its approach to memory management and data handling.
+fib.go - Memory Management:
+
+Line 18-20: http.HandleFunc("/", handler) and go http.ListenAndServe(":8080", nil). Here, Go handles HTTP requests concurrently, showcasing its efficient use of resources and memory management.
+## Rust Files:
+fannkuch-redux.rs - Ownership and Borrowing:
+
+Line 10-12: fn rotate(x: &mut [i32]). Rust’s borrowing rules are applied here, where x is a mutable reference, ensuring that the function can modify the data it points to safely.
+Line 16-18: fn next_permutation(perm: &mut [i32], count: &mut [i32]). This function signature again emphasizes Rust's ownership model, where mutable references are explicitly stated.
+fib.rs - Concurrency with Safety:
+
+Commented Line 1-3: Use of #[tokio::main] for asynchronous programming. This attribute macro sets up an asynchronous runtime, which is central to Rust's safe concurrency model.
+Commented Line 5-7: warp::path!("hello" / String).map(|name| { format!("Hello, {}!", name) });. This line, though commented, hints at the safe handling of concurrent web requests using Warp, a Rust web server framework.
  
  
 ## 4). Results
@@ -111,7 +132,7 @@ Additional POPL aspects like error handling paradigms, type inference, and metap
  
 ## Running Tests
  
-To run tests, run the following commands
+To run tests, run the following commands 
  
 ```bash
   cargo build 
