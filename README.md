@@ -60,8 +60,10 @@ We have analysed the compared and analysed the response times of 1000 HTTP reque
 1)Go (Goroutines): Go is designed to be concurrent with lightweight goroutines and provides built-in support for concurrency. The http.ListenAndServe function uses goroutines to handle incoming requests concurrently. This can lead to efficient utilization of resources and faster response times.  In the Rust code, tokio::spawn is used for asynchronous execution, but the server itself may not be handling requests concurrently. Depending on the specific warp configuration and how it handles incoming requests, it might not be as concurrent as the Go server.
 2) Underlying Runtime and Execution Model:Go has a runtime that includes garbage collection and is optimized for concurrent execution. The Go scheduler is designed to efficiently manage goroutines.
 Rust has a different execution model. Tokio provides asynchronous runtime.
- 
+
+ ## HTTP Server analysis Go :
  ![Alt text](/results/go%20graph.png)
+ ## HTTP Server analysis Rust :
 ![Alt text](/results/rust%20graph.png)
 ## Pfannkuchen Algorithm analysis:
  
@@ -75,7 +77,11 @@ The memory usage difference can be attributed to the design and optimization of 
 Rust uses a strict and safe memory system that eliminates the need for a garbage collector, resulting in faster speed and lower memory usage. However, Rust’s static type system and ownership model, which allow the compiler to generate more efficient code, can lead to higher memory usage in some cases.
  
 Go, on the other hand, uses garbage collection, which automatically frees the memory that is no longer needed by the program. Additionally, Go’s focus on simplicity means that it generally requires less code than Rust and, thus, less memory. However, Go’s garbage collector periodically works in the background to free up data once you hit some pre-specified value, which can add to system overhead and cause variations in memory usage.
+
+## Peak Memory Usage Go:
 ![Alt text](/results/peak%20memory%20go.png)
+
+## Peak Memory Usage Rust:
 ![Alt text](/results/peak%20memory%20rust.png)
 
 ## Time Elapsed
@@ -89,7 +95,10 @@ The performance difference can be attributed to the design and optimization of t
 Rust is designed for systems programming and high-performance computing, with a focus on zero-cost abstractions, minimal runtime, and improved memory safety. It provides fine-grained control over how threads behave and how resources are shared between threads. This can lead to more efficient execution of certain tasks, such as the Pfannkuchen function.
  
 Go, on the other hand, was designed with simplicity and readability in mind. It uses garbage collection and has features like Goroutines that make it easy for developers to build applications that take full advantage of concurrency. However, these features might introduce some overhead, leading to slightly slower execution times compared to Rust.
+
+## Time Elapsed Go: 
 ![Alt text](/results/time%20elapsed%20go%20.png)
+## Time Elapsed Rust: 
 ![Alt text](/results/time%20elapsed%20rust.png)
 ## 5). Potential for Future Work
 Given more time, the project could explore:
